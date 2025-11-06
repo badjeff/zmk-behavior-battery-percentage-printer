@@ -1,0 +1,9 @@
+/ {
+    behaviors {
+        /omit-if-no-ref/ bapp: battery_percentage_printer {
+                compatible = "zmk,behavior-battery-percentage-printer";
+                label = "BATTERY_PERCENTAGE_PRINTER";
+                #binding-cells = <0>;
+        };
+    };
+};
