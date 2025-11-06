@@ -1,4 +1,4 @@
-# ZMK Batter Percentage Printer Behavior
+# ZMK Battery Percentage Printer Behavior
 
 This is a modified version of [alan0ford's behavior_battery_printer.c](https://github.com/alan0ford/zmk-lplancks/blob/GHPilotBatt/boards/shields/lplancks/behavior_battery_printer.c). Changes has been added to make the behavior awaring of peripheral id.
 
