@@ -11,6 +11,7 @@
 #include <zephyr/logging/log.h>
 #include <drivers/behavior.h>
 #include <zmk/behavior.h>
+#include <zmk/events/battery_state_changed.h>
 #include <zmk/events/keycode_state_changed.h>
 #include <zmk/battery.h>
 #include <dt-bindings/zmk/keys.h>
@@ -301,5 +302,26 @@ static const struct behavior_driver_api behavior_battery_printer_api = {
                             &behavior_battery_printer_api);
 
 DT_INST_FOREACH_STATUS_OKAY(BAT_INST)
+
+
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING)
+
+static int bapp_peripheral_batt_lvl_listener(const zmk_event_t *eh) {
+    const struct zmk_peripheral_battery_state_changed *ev =
+        as_zmk_peripheral_battery_state_changed(eh);
+    if (ev == NULL) {
+        return ZMK_EV_EVENT_BUBBLE;
+    }
+    LOG_DBG("batt_lvl_ev soruce: %d state_of_charge: %d", ev->source, ev->state_of_charge);
+    return ZMK_EV_EVENT_BUBBLE;
+};
+
+ZMK_LISTENER(bapp_peripheral_batt_lvl_listener, bapp_peripheral_batt_lvl_listener);
+ZMK_SUBSCRIPTION(bapp_peripheral_batt_lvl_listener, zmk_peripheral_battery_state_changed);
+
+#endif
+#endif
+
 
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */
